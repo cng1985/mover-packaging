@@ -18,8 +18,10 @@ function L0AddLocalDepsIncludeIfNeededInDirectory()
 	fi
 }
 
-git submodule init
-git submodule update
+if [ "$ILABS_DoNotUpdateSubmodules" != "YES" ]; then
+	git submodule init
+	git submodule update
+fi
 
 # MuiKit needs to point to Tools.
 
@@ -38,7 +40,11 @@ INFINITELABS_TOOLS = \$(SRCROOT)/../Tools
 INFINITELABS_LIB_MUIKIT = \$(SRCROOT)/../MuiKit
 EOF
 
-# Set up no ads if needed by this build.
-if [ -x Mover/Scripts/Ads ]; then
+# Use the Variant script to set up the right variant.
+if [ -x Mover/Scripts/Variants/Plus ]; then
+	Mover/Scripts/Variants/Plus
+# Legacy variant setup
+elif [ -x Mover/Scripts/Ads ]; then
 	Mover/Scripts/Ads off
 fi
+

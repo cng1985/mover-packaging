@@ -1,10 +1,17 @@
 #!/bin/bash
 
+if [ "$ILABS_L0ShowOnRequestLogging" == "YES" ]; then
+	set -avx
+fi
+
 HERE="`dirname "$0"`"
 cd "$HERE"
 
-sh Prepare
+git submodule init
+git submodule update
+
 MODULES=( Tools MuiKit Mover )
 for MODULE in "${MODULES[@]}"; do
 	(cd "$MODULE" && git checkout master && git pull origin master) || exit 1
 done
+ILABS_DoNotUpdateSubmodules=YES sh Prepare
