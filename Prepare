@@ -41,7 +41,9 @@ INFINITELABS_LIB_MUIKIT = \$(SRCROOT)/../MuiKit
 EOF
 
 # Use the Variant script to set up the right variant.
-if [ -x Mover/Scripts/Variants/Plus ]; then
+if [ -x Mover/Scripts/Variants/Open ]; then
+	Mover/Scripts/Variants/Open
+elif [ -x Mover/Scripts/Variants/Plus ]; then
 	Mover/Scripts/Variants/Plus
 # Legacy variant setup
 elif [ -x Mover/Scripts/Ads ]; then
