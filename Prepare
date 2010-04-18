@@ -40,6 +40,29 @@ INFINITELABS_TOOLS = \$(SRCROOT)/../Tools
 INFINITELABS_LIB_MUIKIT = \$(SRCROOT)/../MuiKit
 EOF
 
+L0AddLocalDepsIncludeIfNeededInDirectory Mover/3/iPhone
+touch Mover/3/iPhone/Local-Debug.xcconfig
+touch Mover/3/iPhone/Local-Release.xcconfig
+cat > Mover/3/iPhone/Dependencies.xcconfig << EOF
+INFINITELABS_TOOLS = \$(SRCROOT)/../../../Tools
+INFINITELABS_LIB_MUIKIT = \$(SRCROOT)/../../../MuiKit
+EOF
+
+L0AddLocalDepsIncludeIfNeededInDirectory Mover/3/Network+Storage
+touch Mover/3/Network+Storage/Local-Debug.xcconfig
+touch Mover/3/Network+Storage/Local-Release.xcconfig
+cat > Mover/3/Network+Storage/Dependencies.xcconfig << EOF
+INFINITELABS_TOOLS = \$(SRCROOT)/../../../Tools
+INFINITELABS_LIB_MUIKIT = \$(SRCROOT)/../../../MuiKit
+EOF
+
+# make sure SwapKit and other submodules, if any, are inited.
+for i in Mover Tools MuiKit; do
+	if [ -f "$i/.gitmodules" ]; then
+		(cd "$i" && git submodule init && git submodule update) || exit 1
+	fi
+done
+
 # Use the Variant script to set up the right variant.
 if [ -x Mover/Scripts/Variants/Open ]; then
 	Mover/Scripts/Variants/Open
@@ -48,5 +71,9 @@ elif [ -x Mover/Scripts/Variants/Plus ]; then
 # Legacy variant setup
 elif [ -x Mover/Scripts/Ads ]; then
 	Mover/Scripts/Ads off
+fi
+
+if [ -x Mover/3/iPhone/Variants/Switch ]; then
+	Mover/3/iPhone/Variants/Switch Open
 fi
 
